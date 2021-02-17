@@ -8,7 +8,7 @@ server.use(middlewares)
 router.render = (req, res) => {
   res.jsonp({
     body: res.locals.data.map(({ date, description, category2 }) => {
-        date = date.replace(/^\-(.*)/, '$1 B.C.').replace(/(\d+)\/(\d+)\/(\d+)/, '$1')
+        date = date.replace(/^\-(.*)/, '$1 B.C.').replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$3/$1')
         return {date, description, category2};
       })
   })
