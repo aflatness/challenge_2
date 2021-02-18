@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import DatePicker from "react-datepicker";
-import Chart from 'chart.js';
+// import Chart from 'chart.js';
+import createChart from './controller.js'
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -28,32 +29,11 @@ const App = () => {
       })
       .catch(console.log);
   }, [])
-  const ctx = chartEl.current;
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-          labels: Object.keys(data),
-          datasets: [{
-              label: 'BTC Closing prices',
-              data: Object.values(data),
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.5)',
-              ],
-              borderColor: [
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
-          }
-        }
-      });
+
+  useEffect(() => {
+    createChart(chartEl, data);
+  }, [data])
+
   return (
     <>
       <div>
