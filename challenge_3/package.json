@@ -1,0 +1,27 @@
+{
+  "name": "challenge_3",
+  "version": "1.0.0",
+  "description": "Bowling scoring game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "react-dev": "webpack --mode development -w"
+  },
+  "author": "Alec Flatness <aflatness@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.17",
+    "@babel/core": "^7.12.17",
+    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.23.0",
+    "webpack-cli": "^4.5.0"
+  }
+}
