@@ -5,6 +5,7 @@ const App = () => {
   const [frame, setFrame] = useState(1);
   const [roll, setRoll] = useState(1);
   const [score, setScore] = useState(0);
+  const [frameScore, setFrameScore] = useState(0);
   const [prevScores, setPrevScores] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
   const [pins, setPins] = useState(Array(11).fill(''));
@@ -13,19 +14,27 @@ const App = () => {
     setRoll(1);
     setFrame(frame + 1);
     setPins(Array(11).fill(''));
+    setFrameScore(0);
   }
 
   const submitScore = () => {
     if (score === 10) {
-      nextFrame();
       setTotalScore(totalScore + (prevScores[0] || 0) + (prevScores[1] || 0));
-      setPrevScores([prevScores[1], score]);
-    } else if (roll === 2) {
+      setPrevScores([prevScores[1], frameScore]);
       nextFrame();
-      setTotalScore(totalScore + prevScores[1] + score);
-      setPrevScores([prevScores[1], score]);
+    } else if (roll === 2) {
+      setFrameScore(frameScore + score);
+      if (frameScore + score === 10) {
+        setPrevScores([prevScores[1], frameScore + score]);
+      } else {
+        setTotalScore(totalScore + prevScores[1] + score);
+        setPrevScores([prevScores[1], score]);
+      }
+      nextFrame();
     } else {
       setPins(Array(11 - score).fill(''));
+      setFrameScore(frameScore + score);
+      prevScores[1] === 10 ? setTotalScore(totalScore + 10 + score) : null;
       setPrevScores([prevScores[1], score]);
       setRoll(2);
     }
