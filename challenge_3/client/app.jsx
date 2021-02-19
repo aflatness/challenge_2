@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 const App = () => {
   const [frame, setFrame] = useState(1);
   const [roll, setRoll] = useState(1);
-  const [score, setScore] = useState([]);
+  const [score, setScore] = useState(0);
   const [prevScores, setPrevScores] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
   const [pins, setPins] = useState(Array(11).fill(''));
@@ -46,8 +46,8 @@ const App = () => {
       <div>Total score: {totalScore}</div>
       <br />
       <div>Select a score for your bowl: {''}
-        <select value={score} onChange={scoreChange}>
-          {pins.map((v, i) => <option>{i}</option>)}
+        <select value={score} onChange={(e) => setScore(Number(e.target.value))}>
+          {pins.map((v, i) => <option key={i}>{i}</option>)}
         </select> {''}
         <button onClick={submitScore}>Roll!</button>
       </div>
