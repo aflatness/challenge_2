@@ -11,19 +11,36 @@ const App = () => {
   const [pins, setPins] = useState(Array(11).fill(''));
 
   const nextFrame = () => {
-    setRoll(1);
-    setFrame(frame + 1);
+    if (frame === 10.1 && roll === 1){
+      setFrame(frame + .1);
+      setRoll(2);
+    } else if (frame === 10 && roll === 1) {
+      setFrame(frame + .1)
+      setRoll(1);
+    } else if (frame === 10 && roll === 2 && (prevScores[1] + score === 10)) {
+      setFrame(frame + .1);
+      setRoll(2);
+    } else {
+      setFrame(frame + 1);
+      setRoll(1);
+    }
     setPins(Array(11).fill(''));
     setFrameScore(0);
   }
 
   const submitScore = () => {
     if (score === 10) {
-      setTotalScore(totalScore + (prevScores[0] || 0) + (prevScores[1] || 0));
-      setPrevScores([prevScores[1], frameScore]);
+      if (frame === 10.2 || frame === 10.1 && roll === 2) {
+        setTotalScore(totalScore + 10 + prevScores[0] + score)
+      } else if (roll === 2) {
+        setPrevScores([prevScores[1], score]);
+      } else {
+        prevScores[0] === 10 && prevScores[1] === 10 ? setTotalScore(totalScore + 20 + score)
+          : frame > 2 && prevScores[1] === 10 ? setTotalScore(totalScore + 10 + score) : null;
+        setPrevScores([prevScores[1], 10]);
+      }
       nextFrame();
     } else if (roll === 2) {
-      setFrameScore(frameScore + score);
       if (frameScore + score === 10) {
         setPrevScores([prevScores[1], frameScore + score]);
       } else {
@@ -34,7 +51,8 @@ const App = () => {
     } else {
       setPins(Array(11 - score).fill(''));
       setFrameScore(frameScore + score);
-      prevScores[1] === 10 ? setTotalScore(totalScore + 10 + score) : null;
+      prevScores[0] === 10 && prevScores[1] === 10 ? setTotalScore(totalScore + 20 + score)
+        : prevScores[1] === 10 ? setTotalScore(totalScore + 10 + score) : null;
       setPrevScores([prevScores[1], score]);
       setRoll(2);
     }
@@ -49,8 +67,9 @@ const App = () => {
     setPins(Array(11).fill(''));
   }
 
-  console.log(frame, score, prevScores, totalScore)
-  return frame <= 10 ? ( <div>
+  console.log({
+    frame, score, prevScores, totalScore, roll })
+  return frame < 11 ? ( <div>
       <div>Frame: {frame}</div>
       <div>Total score: {totalScore}</div>
       <br />
