@@ -25,5 +25,37 @@ code {
 
 .revealBomb  {
   background-color: red;
-  background-image: url('./bomb.png');
+  background-image: url('./images/bomb.png');
+}
+
+.\31 {
+  background-image: url('./images/one.png');
+}
+
+.\32 {
+  background-image: url('./images/two.png');
+}
+
+.\33 {
+  background-image: url('./images/three.png');
+}
+
+.\34 {
+  background-image: url('./images/four.png');
+}
+
+.\35 {
+  background-image: url('./images/five.png');
+}
+
+.\36 {
+  background-image: url('./images/six.png');
+}
+
+.\37  {
+  background-image: url('./images/seven.png');
+}
+
+.\38 {
+  background-image: url('./images/eight.png');
 }

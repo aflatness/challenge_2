@@ -1,7 +1,7 @@
-import logo from './logo.svg';
-import './App.css';
-import bombMaker from './bombMaker.js';
 import { useState, useEffect } from 'react';
+import './App.css';
+import bombMaker from './controllers/bombMaker';
+import { checkHorz, checkVert, checkMajorDia, checkMinorDia } from './controllers/checkAround';
 
 function App() {
   const [gameOver, setGameOver] = useState(false);
@@ -11,12 +11,24 @@ function App() {
     setMatrix(bombMaker());
   }, []);
 
+  const checkAround = ([r, c]) => {
+    [r, c] = [Number(r), Number(c)];
+    const bombs = checkHorz(matrix, r, c) + checkVert(matrix, r, c) + checkMajorDia(matrix, r, c) + checkMinorDia(matrix, r, c);
+    return bombs;
+  }
+
   const checkBomb = ({ target }) => {
     console.log('space clicked')
     if (Array.from(target.classList).includes('true')) {
       Array.from(document.getElementsByClassName('block')).forEach(block => block.disabled = true);
       Array.from(document.getElementsByClassName('true')).forEach(bomb => bomb.classList.add('revealBomb'));
       setGameOver(true);
+      return;
+    }
+    const number = checkAround(target.id.split(', '));
+    if (number) {
+      target.classList.add(number.toString());
+      console.log(target.classList)
     }
   }
 
@@ -31,8 +43,8 @@ function App() {
     <div className="App">
       {gameOver ? <div>Game Over! <button onClick={resetGame} >Reset</button></div> : ''}
       <div>
-        {matrix.map(row => <div>
-          {row.map(space => <button onClick={checkBomb} className={`${space} block`}></button>)}
+        {matrix.map((row, i) => <div>
+          {row.map((space, j) => <button onClick={checkBomb} className={`${space} block`} id={`${i}, ${j}`}></button>)}
         </div>)}
       </div>
     </div>
