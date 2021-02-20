@@ -8,6 +8,9 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [matrix, setMatrix] = useState([]);
   const [mode, setMode] = useState('clear');
+  const [flags, setFlags] = useState(99);
+  const [won, setWon] = useState(false);
+  const [clicked, setClicked] = useState(0);
 
   useEffect(() => {
     setMatrix(bombMaker());
@@ -20,42 +23,69 @@ function App() {
   }
 
   const checkBomb = ({ target }) => {
-    console.log('space clicked')
     if (mode === 'clear') {
+      if (Array.from(target.classList).includes('flag')) {
+        return;
+      }
+      target.disabled = true;
       if (Array.from(target.classList).includes('true')) {
         Array.from(document.getElementsByClassName('block')).forEach(block => block.disabled = true);
-        Array.from(document.getElementsByClassName('true')).forEach(bomb => bomb.classList.add('revealBomb'));
-      setGameOver(true);
-      return;
+        Array.from(document.getElementsByClassName('true')).forEach(bomb => {
+          bomb.classList.remove('flag');
+          bomb.classList.add('revealBomb')
+        });
+        setGameOver(true);
+        return;
       }
       const number = checkAround(target.id.split(', '));
       if (number) {
         target.classList.add(number.toString());
-        console.log(target.classList)
+        setClicked(clicked + 1);
       } else {
+        target.classList.add('clicked');
+        setClicked(clicked + 1);
         clickBorderedElements(target.id.split(', '));
       }
+      if (clicked === 477) { setWon(true)}
       return;
     }
     const classes = Array.from(target.classList);
-    if (classes.includes('flag')) { target.classList.remove('flag') }
-    else { target.classList.add('flag')};
+    if (flags === 0) {
+      alert('No more flags left!');
+      return;
+    }
+    if (classes.includes('flag')) {
+      target.classList.remove('flag')
+      setFlags(flags + 1);
+    }
+    else {
+      target.classList.add('flag')
+      setFlags(flags - 1)
+    };
   }
 
   const resetGame = () => {
     setMatrix(bombMaker());
     setGameOver(false);
-    Array.from(document.getElementsByClassName('block')).forEach(block => block.disabled = false);
-    Array.from(document.getElementsByClassName('true')).forEach(bomb => bomb.classList.remove('revealBomb'));
+    setFlags(99);
+    setMode('clear');
+
+    Array.from(document.getElementsByClassName('block')).forEach(block => {
+      block.disabled = false
+      block.classList = ['block']
+    });
+    // Array.from(document.getElementsByClassName('true')).forEach(bomb => bomb.classList.remove('revealBomb'));
   }
 
   const changeMode = () => {
-    mode === 'clear' ? setMode('flags') : setMode('clear');
+    mode === 'clear' ? setMode('Flags') : setMode('clear');
   }
 
   return (
     <div className="App">
       {gameOver ? <div>Game Over! <button onClick={resetGame} >Reset</button></div> : <div>{mode} <button onClick={changeMode} >Switch mode</button></div>}
+      {!won ? `Flags left: ${flags}` : <div>You Won! <button onClick={resetGame} >Reset</button></div>}
+      <br/><br/>
       <div>
         {matrix.map((row, i) => <div>
           {row.map((space, j) => <button onClick={checkBomb} className={`${space} block`} id={`${i}, ${j}`}></button>)}
