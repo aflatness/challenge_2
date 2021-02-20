@@ -59,3 +59,7 @@ code {
 .\38 {
   background-image: url('./images/eight.png');
 }
+
+.flag {
+  background-image: url('./images/flag.jpg');
+}
