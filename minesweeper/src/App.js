@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import bombMaker from './controllers/bombMaker';
 import { checkHorz, checkVert, checkMajorDia, checkMinorDia } from './controllers/checkAround';
+import clickBorderedElements from './controllers/clickBordered';
 
 function App() {
   const [gameOver, setGameOver] = useState(false);
@@ -31,6 +32,8 @@ function App() {
       if (number) {
         target.classList.add(number.toString());
         console.log(target.classList)
+      } else {
+        clickBorderedElements(target.id.split(', '));
       }
       return;
     }
