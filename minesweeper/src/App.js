@@ -7,7 +7,7 @@ import clickBorderedElements from './controllers/clickBordered';
 function App() {
   const [gameOver, setGameOver] = useState(false);
   const [matrix, setMatrix] = useState([]);
-  const [mode, setMode] = useState('clear');
+  const [mode, setMode] = useState('Clear');
   const [flags, setFlags] = useState(99);
   const [won, setWon] = useState(false);
   const [clicked, setClicked] = useState(0);
@@ -23,7 +23,7 @@ function App() {
   }
 
   const checkBomb = ({ target }) => {
-    if (mode === 'clear') {
+    if (mode === 'Clear') {
       if (Array.from(target.classList).includes('flag')) {
         return;
       }
@@ -44,46 +44,47 @@ function App() {
       } else {
         target.classList.add('clicked');
         setClicked(clicked + 1);
-        clickBorderedElements(target.id.split(', '));
+        clickBorderedElements(target.id.split(', '), setClicked, clicked);
       }
       if (clicked === 477) { setWon(true)}
       return;
     }
     const classes = Array.from(target.classList);
-    if (flags === 0) {
-      alert('No more flags left!');
-      return;
-    }
     if (classes.includes('flag')) {
       target.classList.remove('flag')
       setFlags(flags + 1);
     }
     else {
+      if (flags === 0) {
+        alert('No more flags left!');
+        return;
+      }
       target.classList.add('flag')
       setFlags(flags - 1)
     };
   }
 
   const resetGame = () => {
+    Array.from(document.getElementsByClassName('block')).forEach(block => {
+      block.disabled = false
+      block.classList = ['block'];
+    });
     setMatrix(bombMaker());
     setGameOver(false);
     setFlags(99);
-    setMode('clear');
+    setMode('Clear');
 
-    Array.from(document.getElementsByClassName('block')).forEach(block => {
-      block.disabled = false
-      block.classList = ['block']
-    });
     // Array.from(document.getElementsByClassName('true')).forEach(bomb => bomb.classList.remove('revealBomb'));
   }
 
   const changeMode = () => {
-    mode === 'clear' ? setMode('Flags') : setMode('clear');
+    mode === 'Clear' ? setMode('Flags') : setMode('Clear');
   }
-
+  console.log(clicked);
   return (
     <div className="App">
-      {gameOver ? <div>Game Over! <button onClick={resetGame} >Reset</button></div> : <div>{mode} <button onClick={changeMode} >Switch mode</button></div>}
+      <div className='title' >FireworkSweeper!</div>
+      {gameOver ? <div className='mode' >Game Over! <button onClick={resetGame} >Reset</button></div> : <div className='mode'>{mode} <button onClick={changeMode} >Switch mode</button></div>}
       {!won ? `Flags left: ${flags}` : <div>You Won! <button onClick={resetGame} >Reset</button></div>}
       <br/><br/>
       <div>
@@ -94,5 +95,7 @@ function App() {
     </div>
   );
 }
+
+console.log(document.getElementsByClassName('true').length)
 
 export default App;
