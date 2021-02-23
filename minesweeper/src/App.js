@@ -24,7 +24,7 @@ function App() {
 
   const checkBomb = ({ target }) => {
     if (mode === 'Clear') {
-      if (Array.from(target.classList).includes('flag')) {
+      if (Array.from(target.classList).includes('flag') || target.disabled) {
         return;
       }
       target.disabled = true;
@@ -80,7 +80,7 @@ function App() {
   const changeMode = () => {
     mode === 'Clear' ? setMode('Flags') : setMode('Clear');
   }
-  console.log(clicked);
+
   return (
     <div className="App">
       <div className='title' >FireworkSweeper!</div>
@@ -95,7 +95,5 @@ function App() {
     </div>
   );
 }
-
-console.log(document.getElementsByClassName('true').length)
 
 export default App;

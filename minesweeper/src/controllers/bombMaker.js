@@ -3,7 +3,7 @@ export default function bombMaker() {
 
   for (let i = 0; i < 16; i++) {
     matrix[i] = [];
-    for (let j = 0; j < 37; j++) {
+    for (let j = 0; j < 36; j++) {
       matrix[i][j] = false;
     }
   }
